@@ -1,23 +1,42 @@
-version: '3.3'
+version: '3.8'
+
 services:
+  # Apache with PHP container
   web:
-    build:
-      context: .
+    image: php:7.4-apache
+    container_name: flour_mill_web
+    volumes:
+      - ./src:/var/www/html
     ports:
       - "8080:80"
-    volumes:
-      - ./www:/var/www/html
     depends_on:
       - db
-
-  db:
-    image: mysql:5.6
+    networks:
+      - flour_mill_net
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: accounting
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DB=flour_mill
+
+  # MySQL container
+  db:
+    image: mysql:5.7
+    container_name: flour_mill_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: flour_mill
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
     volumes:
       - db_data:/var/lib/mysql
-    command: --default-authentication-plugin=mysql_native_password
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - flour_mill_net
+
+networks:
+  flour_mill_net:
+    driver: bridge
 
 volumes:
   db_data:
