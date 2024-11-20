@@ -1,6 +1,5 @@
-<?php
-include('includes/header.php');
-include('includes/nav.php');
-echo "<h1>Welcome to Stark Flour Mill Accounting</h1>";
-include('includes/footer.php');
-?>
+<?php include 'includes/header.php'; ?>
+    <h1>Welcome to Stark Flour Mill Accounting</h1>
+    <p>Manage your users and transactions with ease.</p>
+</body>
+</html>
