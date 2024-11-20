@@ -1,14 +1,15 @@
-version: '3.3'
+version: '3.8'
 
 services:
   # Apache with PHP container
   web:
-    image: php:7.4-apache
+    build:
+      context: .  # Use the Dockerfile in the current directory to build the image
     container_name: flour_mill_web
     volumes:
-      - ./src:/var/www/html
+      - ./src:/var/www/html  # Mount the src directory where your PHP files are
     ports:
-      - "8080:80"
+      - "8080:80"            # Expose the web service on port 8080
     depends_on:
       - db
     networks:
@@ -30,7 +31,7 @@ services:
       MYSQL_PASSWORD: root
     volumes:
       - db_data:/var/lib/mysql
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql  # Initialize with SQL file if needed
     networks:
       - flour_mill_net
 
